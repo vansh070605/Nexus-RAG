@@ -23,7 +23,7 @@ Nexus RAG is a minimalist, high-performance Retrieval Augmented Generation (RAG)
 ## 📁 Project Structure
 
 ```text
-e:/CODING/Lang Chain LLM App/
+.
 ├── app/                    # Main application package
 │   ├── api/                # API blueprints and routes
 │   │   └── routes.py
@@ -45,6 +45,15 @@ e:/CODING/Lang Chain LLM App/
 - **LLM**: Llama 3 (via Groq)
 - **Frontend**: Vanilla JS, CSS (Quantum Dark Theme)
 
+## ☁️ Deployment (Render)
+
+1. **New Web Service**: Connect your GitHub repo to [Render](https://render.com).
+2. **Environment Variables**:
+   - `GROQ_API_KEY`: Your key from Groq Console.
+   - `GROQ_MODEL`: `llama-3.1-8b-instant` (optional).
+   - `PYTHON_VERSION`: `3.11.0` (recommended).
+3. **Build Command**: `pip install -r requirements.txt`
+4. **Start Command**: `gunicorn run:app`
+
 ## ⚖️ License
 MIT
-# Nexus-RAG
