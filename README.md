@@ -55,5 +55,14 @@ Nexus RAG is a minimalist, high-performance Retrieval Augmented Generation (RAG)
 3. **Build Command**: `pip install -r requirements.txt`
 4. **Start Command**: `gunicorn run:app`
 
+## 🔺 Deployment (Vercel)
+
+1. **New Project**: Import your GitHub repo into [Vercel](https://vercel.com).
+2. **Framework Preset**: Choose **"Other"** (it will auto-detect `vercel.json`).
+3. **Environment Variables**:
+   - `GROQ_API_KEY`: Your key.
+   - `VERCEL`: `1` (required for temp directory switching).
+4. **Deploy**: Vercel will build the serverless function and serve your app.
+
 ## ⚖️ License
 MIT

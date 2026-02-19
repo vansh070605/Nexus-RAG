@@ -14,9 +14,13 @@ def create_app():
     CORS(app)
 
     # Ensure uploads directory exists
-    # uploads is at the project root (one level up from this file)
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    uploads_dir = os.path.join(project_root, "uploads")
+    # For Vercel/Serverless environments, we must use /tmp
+    if os.environ.get("VERCEL"):
+        uploads_dir = "/tmp/uploads"
+    else:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        uploads_dir = os.path.join(project_root, "uploads")
+        
     os.makedirs(uploads_dir, exist_ok=True)
     app.config["UPLOAD_FOLDER"] = uploads_dir
     app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50 MB limit
