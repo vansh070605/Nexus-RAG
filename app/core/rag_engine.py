@@ -41,8 +41,21 @@ def process_pdf(pdf_path: str) -> FAISS:
         A FAISS vector store ready for similarity search.
     """
     # 1. Load pages
-    loader = PyPDFLoader(pdf_path)
-    documents = loader.load()
+    print(f"DEBUG: Loading PDF from {pdf_path}")
+    try:
+        loader = PyPDFLoader(pdf_path)
+        documents = loader.load()
+    except Exception as e:
+        print(f"DEBUG: Error loading PDF: {str(e)}")
+        if isinstance(e, IndexError):
+            raise ValueError(f"PDF Parsing Error: The file structure is invalid or data is missing (IndexError).")
+        raise ValueError(f"Could not read PDF: {str(e)}")
+    
+    if not documents:
+        print("DEBUG: No pages were loaded from the PDF.")
+        raise ValueError("The PDF document appears to be empty or unreadable.")
+
+    print(f"DEBUG: Loaded {len(documents)} pages.")
 
     # 2. Chunk the text
     splitter = RecursiveCharacterTextSplitter(
@@ -51,6 +64,12 @@ def process_pdf(pdf_path: str) -> FAISS:
         separators=["\n\n", "\n", ".", " ", ""],
     )
     chunks = splitter.split_documents(documents)
+
+    if not chunks:
+        print("DEBUG: No text chunks were created (likely no text content found).")
+        raise ValueError("No text could be extracted from the PDF. It might be image-only (scanned).")
+
+    print(f"DEBUG: Created {len(chunks)} text chunks.")
 
     # 3. Embed and index
     vector_db = FAISS.from_documents(chunks, get_embeddings())
