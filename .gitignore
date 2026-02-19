@@ -1,0 +1,42 @@
+# ── Python ────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual Environment ────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Environment / Secrets ──────────────────
+.env
+.env.*
+!.env.example
+
+# ── Uploads (temp files) ───────────────────
+uploads/
+*.pdf
+
+# ── IDE / Editor ───────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Logs ──────────────────────────────────
+*.log
+logs/
+
+# ── FAISS / Model Cache ────────────────────
+*.faiss
+*.pkl
+*.index
+.cache/
