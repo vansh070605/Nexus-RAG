@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description"
+        content="Nexus RAG — Upload any PDF and interrogate it with AI. Powered by FAISS, LangChain, and Llama 3.">
+    <meta name="theme-color" content="#07080d">
+
+    <!-- PWA / Apple Mobile -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NexusRAG">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Nexus RAG — Intelligence Augmented">
+    <meta property="og:description" content="Upload any PDF and ask questions with AI precision.">
+    <meta property="og:type" content="website">
+
+    <title>Nexus RAG — Intelligence Augmented</title>
+
+    <!-- SVG Favicon (inline, no file needed) -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Ctext x='16' y='23' font-size='18' text-anchor='middle' font-family='system-ui' fill='white'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E">
+    <!-- Fallback for older browsers -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+    <div class="scene-bg"></div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- App Shell -->
+    <div class="app-shell">
+
+        <!-- ── Top Bar ── -->
+        <header class="topbar">
+            <a class="logo" href="#">
+                <div class="logo-icon"><i class="fa-solid fa-brain"></i></div>
+                <span class="logo-text">Nexus<span>RAG</span></span>
+            </a>
+
+            <div class="topbar-pills">
+                <div class="pill">
+                    <span class="dot"></span>
+                    <span>FAISS Index</span>
+                </div>
+                <div class="pill model">
+                    <span class="dot"></span>
+                    <span>Llama 3 · 8B</span>
+                </div>
+                <div class="pill pill-hide-sm">
+                    <span class="dot" style="background:#f59e0b; box-shadow:0 0 8px #f59e0b;"></span>
+                    <span>MiniLM-L6-v2</span>
+                </div>
+            </div>
+
+            <div class="status-badge" id="app-status">
+                <div class="status-indicator" id="status-dot"></div>
+                <span id="status-text">Ready</span>
+            </div>
+        </header>
+
+        <!-- ── Workspace ── -->
+        <main class="workspace">
+
+            <!-- ─── Chat Panel ─── -->
+            <section class="panel chat-engine" id="chat-panel">
+
+                <!-- Chat Top Bar -->
+                <div class="chat-topbar">
+                    <div class="chat-topbar-title">
+                        <h2>Document Intelligence</h2>
+                        <p class="chat-subtitle">Semantic search over your document</p>
+                    </div>
+                    <div class="chat-topbar-actions">
+                        <button class="icon-btn" title="Clear chat" id="clear-btn">
+                            <i class="fa-solid fa-broom"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Welcome State -->
+                    <div class="welcome-state" id="welcome-state">
+                        <div class="welcome-orb">🧠</div>
+                        <h3>Start with Your Document</h3>
+                        <p>Upload a PDF and I'll build a semantic map of its content — ready to answer any question with
+                            precision.</p>
+                        <div class="welcome-steps">
+                            <div class="step-chip">
+                                <div class="step-num">1</div>
+                                <span>Upload PDF</span>
+                            </div>
+                            <div class="step-chip">
+                                <div class="step-num">2</div>
+                                <span>Wait for indexing</span>
+                            </div>
+                            <div class="step-chip">
+                                <div class="step-num">3</div>
+                                <span>Ask anything</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Zone -->
+                <div class="input-zone">
+                    <!-- Progress Bar (hidden until upload) -->
+                    <div class="progress-wrap hidden" id="upload-progress-bar" style="margin-bottom: 12px;">
+                        <div class="progress-label">
+                            <span id="progress-label-text">Encoding vectors...</span>
+                            <span id="progress-pct">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- File Card (hidden until upload) -->
+                    <div class="file-card-wrap hidden" id="file-card-wrap" style="margin-bottom: 12px; padding: 0;">
+                        <div class="file-card">
+                            <div class="file-card-icon">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <div class="file-card-details">
+                                <div class="file-card-name" id="filename-display">document.pdf</div>
+                                <div class="file-card-meta" id="filesize-display">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-box" id="input-box">
+                        <input type="file" id="pdf-upload" accept=".pdf" hidden>
+                        <label for="pdf-upload" class="add-file-btn" id="drop-zone" title="Upload PDF">
+                            <i class="fa-solid fa-plus"></i>
+                        </label>
+                        <textarea id="user-query" placeholder="Ask a question about your document..." rows="1"
+                            disabled></textarea>
+                        <button class="send-btn" id="send-btn" disabled aria-label="Send message">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="input-footer">
+                        <span class="hint-desktop">Press <b>Enter ↵</b> to send · <b>Shift + Enter</b> for new
+                            line</span>
+                        <span class="hint-mobile">Tap ✈ to send</span>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

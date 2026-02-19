@@ -64,5 +64,13 @@ Nexus RAG is a minimalist, high-performance Retrieval Augmented Generation (RAG)
    - `VERCEL`: `1` (required for temp directory switching).
 4. **Deploy**: Vercel will build the serverless function and serve your app.
 
+## 🌐 Split Hosting (Recommended for Speed)
+
+If you want the fastest UI response, host the **Frontend** as a static site and the **Backend** on Render.
+
+1.  **Frontend**: Upload the `frontend/` folder to Vercel or Netlify.
+2.  **Configuration**: In `frontend/js/app.js`, update `API_BASE_URL` to your Render URL.
+3.  **Backend**: Keep the main repository running on Render.
+
 ## ⚖️ License
 MIT
