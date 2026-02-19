@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ── Configuration ─────────────────────────────────────────────
-    // Change this to your Render URL for production
-    const API_BASE_URL = 'https://nexus-rag-nru8.onrender.com';
+    // If hosted on Vercel, point to Render for the heavy RAG processing
+    // because Vercel Serverless Functions time out after 10 seconds.
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? ''
+        : 'https://nexus-rag-nru8.onrender.com';
 
     // ── DOM Refs ──────────────────────────────────────────────────
     const dropZone = document.getElementById('drop-zone');

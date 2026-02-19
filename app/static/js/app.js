@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ── Configuration ─────────────────────────────────────────────
+    // If hosted on Vercel, point to Render for the heavy RAG processing
+    // because Vercel Serverless Functions time out after 10 seconds.
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? ''
+        : 'https://nexus-rag-nru8.onrender.com';
 
     // ── DOM Refs ──────────────────────────────────────────────────
     const dropZone = document.getElementById('drop-zone');
@@ -182,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
 
         try {
-            const response = await fetch('/upload', { method: 'POST', body: formData });
+            const response = await fetch(`${API_BASE_URL}/upload`, { method: 'POST', body: formData });
             const result = await response.json();
 
             clearInterval(interval);
@@ -247,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appendMessage(typingRow);
 
         try {
-            const response = await fetch('/ask', {
+            const response = await fetch(`${API_BASE_URL}/ask`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: text })
