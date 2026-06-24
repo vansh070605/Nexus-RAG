@@ -1,9 +1,6 @@
 import os
 import sys
 
-# Add the root directory to the python path so that 'app' can be found
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-
 from flask import Flask
 from flask_cors import CORS
 
