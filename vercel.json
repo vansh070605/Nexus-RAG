@@ -5,11 +5,11 @@
     "rewrites": [
         {
             "source": "/upload",
-            "destination": "/app.py"
+            "destination": "/api/index.py"
         },
         {
             "source": "/ask",
-            "destination": "/app.py"
+            "destination": "/api/index.py"
         },
         {
             "source": "/css/(.*)",
