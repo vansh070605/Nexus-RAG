@@ -5,6 +5,7 @@ Run this file to start the Nexus RAG development server.
 Usage:
     python run.py
 """
+from flask import Flask
 from app import create_app
 
 app = create_app()
