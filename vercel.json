@@ -4,11 +4,11 @@
     "rewrites": [
         {
             "source": "/upload",
-            "destination": "/index.py"
+            "destination": "/api/index.py"
         },
         {
             "source": "/ask",
-            "destination": "/index.py"
+            "destination": "/api/index.py"
         },
         {
             "source": "/css/(.*)",
