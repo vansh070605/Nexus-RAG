@@ -1,8 +1,10 @@
-from flask import Flask
+import os
+import sys
 
-app = Flask(__name__)
+# Add root to python path so it can import backend
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return 'Hello World'
+from backend import create_app
+
+# Vercel Serverless Function entrypoint
+app = create_app()
