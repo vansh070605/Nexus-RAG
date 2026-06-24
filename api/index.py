@@ -1,10 +1,3 @@
-"""
-run.py — Application Entry Point
-Run this file to start the Nexus RAG development server.
-
-Usage:
-    python run.py
-"""
 import os
 import sys
 
@@ -12,16 +5,20 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from flask import Flask
-from app import create_app
+from flask_cors import CORS
 
-# Hack for Vercel's AST parser: It statically looks for `app = Flask(...)`
 app = Flask(__name__)
-# Immediately overwrite it with our actual application factory
-app = create_app()
+CORS(app)
 
-if __name__ == "__main__":
-    app.run(
-        debug=True,
-        port=5000,
-        use_reloader=False,  # Disabled: prevents torch/venv file-change restarts
-    )
+if os.environ.get("VERCEL") or os.environ.get("VERCEL_URL"):
+    uploads_dir = "/tmp/uploads"
+else:
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    uploads_dir = os.path.join(project_root, "uploads")
+    
+os.makedirs(uploads_dir, exist_ok=True)
+app.config["UPLOAD_FOLDER"] = uploads_dir
+app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
+
+from app.api.routes import main
+app.register_blueprint(main)
