@@ -14,6 +14,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from flask import Flask
 from app import create_app
 
+# Hack for Vercel's AST parser: It statically looks for `app = Flask(...)`
+app = Flask(__name__)
+# Immediately overwrite it with our actual application factory
 app = create_app()
 
 if __name__ == "__main__":
