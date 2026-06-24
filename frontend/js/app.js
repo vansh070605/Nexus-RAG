@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ── Configuration ─────────────────────────────────────────────
-    // If hosted on Vercel, point to Render for the heavy RAG processing
-    // because Vercel Serverless Functions time out after 10 seconds.
-    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? ''
-        : 'https://nexus-rag-nru8.onrender.com';
+    // Hosted on Vercel: The backend is now a serverless function on the same domain.
+    const API_BASE_URL = '';
 
     // ── DOM Refs ──────────────────────────────────────────────────
     const dropZone = document.getElementById('drop-zone');

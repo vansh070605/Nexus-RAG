@@ -1,7 +1,0 @@
-# Ignore Python backend files for Vercel deployment
-# (The backend is deployed to Render, Vercel only serves the frontend)
-requirements.txt
-run.py
-app/
-Procfile
-.env*

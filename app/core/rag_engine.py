@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
@@ -17,14 +17,15 @@ from langchain_core.output_parsers import StrOutputParser
 load_dotenv()
 
 # ── Singleton embedding model (loaded once, reused) ────────────────────────────
-_embeddings: HuggingFaceEmbeddings | None = None
+_embeddings: GoogleGenerativeAIEmbeddings | None = None
 
 
-def get_embeddings() -> HuggingFaceEmbeddings:
-    """Return a cached instance of the HuggingFace embedding model."""
+def get_embeddings() -> GoogleGenerativeAIEmbeddings:
+    """Return a cached instance of the Google Gemini embedding model."""
     global _embeddings
     if _embeddings is None:
-        _embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        # Requires GEMINI_API_KEY environment variable to be set
+        _embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     return _embeddings
 
 

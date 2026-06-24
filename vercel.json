@@ -3,11 +3,23 @@
     "name": "nexus-rag",
     "builds": [
         {
+            "src": "api/index.py",
+            "use": "@vercel/python"
+        },
+        {
             "src": "frontend/**/*",
             "use": "@vercel/static"
         }
     ],
     "routes": [
+        {
+            "src": "/upload",
+            "dest": "/api/index.py"
+        },
+        {
+            "src": "/ask",
+            "dest": "/api/index.py"
+        },
         {
             "src": "/css/(.*)",
             "dest": "/frontend/css/$1"

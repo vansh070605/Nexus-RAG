@@ -15,9 +15,8 @@ langchain-text-splitters>=0.3.0
 # ── LLM Provider: Groq ────────────────────
 langchain-groq>=0.2.0
 
-# ── Embeddings ────────────────────────────
-langchain-huggingface>=0.1.0
-sentence-transformers>=3.0.0
+# ── Embeddings (API based) ────────────────
+langchain-google-genai>=1.0.0
 
 # ── Vector Store ──────────────────────────
 faiss-cpu>=1.8.0
