@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Simulated incremental progress
         const steps = [
-            { pct: 20, label: 'Parsing PDF pages...' },
-            { pct: 45, label: 'Splitting into chunks...' },
+            { pct: 20, label: 'Waking up server (can take ~50s)...' },
+            { pct: 45, label: 'Parsing PDF pages...' },
             { pct: 70, label: 'Generating embeddings...' },
             { pct: 88, label: 'Building FAISS index...' },
         ];
@@ -189,7 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(`${API_BASE_URL}/upload`, { method: 'POST', body: formData });
-            const result = await response.json();
+            
+            let result;
+            try {
+                result = await response.json();
+            } catch (jsonErr) {
+                // If Render returns 502/504 HTML page due to timeout/OOM
+                throw new Error('Server took too long to respond or ran out of memory. Please try again.');
+            }
 
             clearInterval(interval);
             setProgress(100, 'Complete!');
